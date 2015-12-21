@@ -74,4 +74,26 @@ public class Clause {
         }
         return buf.toString();
     }
+
+	public boolean is2SAT() {
+		if(length ==2 && !isHorn()){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	private boolean isHorn() {
+		
+		return false;
+	}
+	
+	private boolean isNSAT() {
+		if(length>2){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
 }
