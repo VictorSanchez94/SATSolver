@@ -95,5 +95,10 @@ public class Clause {
 			return false;
 		}
 	}
+	
+	
+	public String[] getVariables() {
+		return variables;
+	}
 
 }
