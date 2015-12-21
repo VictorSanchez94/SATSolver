@@ -6,11 +6,11 @@ package utils;
  */
 
 public class Clause {
-    private String variables[];
+    private Literal[] variables;
     private int size,i;
     final private int length;
 
-    public Clause(final String a[]) {
+    public Clause(final Literal[] a) {
         this.variables = a;
         this.length = a.length;
         this.size = a.length;
@@ -76,19 +76,28 @@ public class Clause {
     }
 
 	public boolean is2SAT() {
-		if(length ==2 && !isHorn()){
+		if(length ==2 && !isHornSAT()){
 			return true;
 		}else{
 			return false;
 		}
 	}
 
-	private boolean isHorn() {
-		
-		return false;
+	public boolean isHornSAT() {
+		int numPositiveVars = 0;
+		for(int i=0; i<length; i++){
+			if(!variables[i].contains("-")){
+				numPositiveVars++;
+			}
+		}
+		if(numPositiveVars > 1){
+			return false;
+		}else{
+			return true;
+		}
 	}
 	
-	private boolean isNSAT() {
+	public boolean isNSAT() {
 		if(length>2){
 			return true;
 		}else{

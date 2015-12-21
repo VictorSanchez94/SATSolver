@@ -19,7 +19,7 @@ public class Formula {
 	public Formula (String pathFile) {
 		try {
 			scanner = new Scanner(new File(pathFile));
-			scanner.useDelimiter("[\\(\\)\\+]");
+			scanner.useDelimiter("[\\(\\)\\+\\ *\\n]");
 		} catch (FileNotFoundException e) {
 			System.err.println("ERROR. El fichero indicado no existe.");
 		}
@@ -27,7 +27,6 @@ public class Formula {
 	
 	public Clause[] start() {
 		int i = 0;
-		int numVariables = scanner.nextInt();
 		int numClauses = scanner.nextInt();
 		clauses = new Clause[numClauses];		//Initialize clauses vector
 		ArrayList<String> aux = new ArrayList<String>();
@@ -36,8 +35,14 @@ public class Formula {
 			s = scanner.next();
 			if(s.equals("*")){
 				clauses[i] = new Clause((String[])aux.toArray());
+				if(!clauses[i].isHornSAT()){
+					isHornSAT = false;
+				}
 				if(!clauses[i].is2SAT()){
 					is2SAT = false;
+				}
+				if(!clauses[i].isNSAT()){
+					isNSAT = false;
 				}
 				i++; aux.clear();
 			}else{
@@ -47,6 +52,15 @@ public class Formula {
 		
 		
 		return clauses;
+	}
+	
+	
+	public static void main (String[] args) {
+		Formula f = new Formula("testFiles/prueba1.cnf");
+		Clause[] c = f.start();
+		for(int i=0; i<c.length; i++){
+			System.out.println(c[i].toString());
+		}
 	}
 	
 }
