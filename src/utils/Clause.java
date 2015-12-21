@@ -29,7 +29,7 @@ public class Clause {
         //also update clause size with the update size of the array
         for (i=0; i<length; i++) {
             if (variables[i].equals(var)) {
-                variables[i] = "";
+                variables[i].literal = "";
                 size--;
             }
         }
@@ -38,14 +38,18 @@ public class Clause {
     public void addVar(final String var) {
         for (i=0; i<length; i++) {
             if (variables[i].equals("")) {
-                variables[i] = var;
+                variables[i].literal = var;
                 size++;
                 break;
             }
         }
     }
 
-    public String get(final int index) {
+    public Literal[] getLiterals(){
+    	return variables;
+    }
+    
+    public Literal get(final int index) {
         //*ensure index is formated for array*
         return variables[index];
     }
@@ -86,7 +90,7 @@ public class Clause {
 	public boolean isHornSAT() {
 		int numPositiveVars = 0;
 		for(int i=0; i<length; i++){
-			if(!variables[i].contains("-")){
+			if(!variables[i].literal.contains("-")){
 				numPositiveVars++;
 			}
 		}
@@ -103,11 +107,6 @@ public class Clause {
 		}else{
 			return false;
 		}
-	}
-	
-	
-	public String[] getVariables() {
-		return variables;
 	}
 
 }
