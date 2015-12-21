@@ -3,15 +3,16 @@ package utils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class Formula {
 	
 	private ArrayList<Clause> clauses;
 	private Scanner scanner;
-	private boolean isHornSAT;
-	private boolean is2SAT;
-	private boolean isNSAT;
+	private boolean isHornSAT = true;
+	private boolean is2SAT = true;
+	private boolean isNSAT = true;
 	
 	/**
 	 * Constructor
@@ -19,14 +20,13 @@ public class Formula {
 	public Formula (String pathFile) {
 		try {
 			scanner = new Scanner(new File(pathFile));
-			scanner.useDelimiter("[\\(\\)\\+]");
+			scanner.useDelimiter("([\\)\n]|\\(|\\)|\\+)+");
 		} catch (FileNotFoundException e) {
 			System.err.println("ERROR. El fichero indicado no existe.");
 		}
 	}
 	
-	public ArrayList<Clause> start() {
-		int i = 0;
+	public void start() {
 		clauses = new ArrayList<Clause>();		//Initialize clauses vector
 		ArrayList<Literal> aux = new ArrayList<Literal>();
 		String s;
@@ -34,32 +34,47 @@ public class Formula {
 			s = scanner.next();
 			System.out.println(s);
 			if(s.equals("*")){
-				clauses.add(new Clause(aux));
-				if(!clauses.get(i).isHornSAT()){
+				Clause cAux = new Clause((ArrayList<Literal>) aux.clone());
+				clauses.add(cAux);
+				if(!cAux.isHornSAT()){
 					isHornSAT = false;
 				}
-				if(!clauses.get(i).is2SAT()){
+				if(!cAux.is2SAT()){
 					is2SAT = false;
 				}
-				if(!clauses.get(i).isNSAT()){
+				if(!cAux.isNSAT()){
 					isNSAT = false;
 				}
-				i++; aux.clear();
+				aux.clear();
 			}else{
 				aux.add(new Literal(s));
 			}
 		}
-		
+		clauses.add(new Clause((ArrayList<Literal>) aux.clone()));
+	}
+	
+	public String toString() {
+		String buf = "";
+		Iterator<Clause> it = clauses.iterator();
+		if(it.hasNext()){
+			buf += it.next().toString();
+			while(it.hasNext()){
+				buf += " * " + it.next();
+			}
+		}
+		return buf;
+	}
+	
+	public ArrayList<Clause> getFormula() {
 		return clauses;
 	}
 	
 	
 	public static void main (String[] args) {
 		Formula f = new Formula("testFiles/prueba1.cnf");
-		ArrayList<Clause> c = f.start();
-		for(int i=0; i<c.size(); i++){
-			System.out.println(c.get(i).toString());
-		}
+		f.start();
+		System.out.println("LENGTH: " + f.getFormula().size());
+		System.out.println(f.toString());
 	}
 	
 }

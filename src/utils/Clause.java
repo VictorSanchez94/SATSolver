@@ -1,6 +1,7 @@
 package utils;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /*
  * Stores the variables contained in each Clause of the Formula
@@ -63,18 +64,6 @@ public class Clause {
         return variables[i];
     }*/
 
-    @Override
-    public String toString() {
-        final String delimiter = " ";
-        final int varLen = variables.size();
-        final StringBuilder buf = new StringBuilder();
-        for (int curVar = 0; curVar < varLen; ++curVar) {
-            buf.append(variables.get(curVar));
-            buf.append(delimiter);
-        }
-        return buf.toString();
-    }
-
 	public boolean is2SAT() {
 		if(size ==2 && !isHornSAT()){
 			return true;
@@ -104,5 +93,19 @@ public class Clause {
 			return false;
 		}
 	}
+	
+    @Override
+    public String toString() {
+        String buf = "( ";
+        Iterator<Literal> it = variables.iterator();
+        if(it.hasNext()){
+        	buf += it.next().toString();
+	        while (it.hasNext()) {
+	            buf += " + " + it.next().toString();
+	        }
+        }
+        buf += " )";
+        return buf;
+    }
 
 }

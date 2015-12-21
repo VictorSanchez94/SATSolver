@@ -20,5 +20,13 @@ public class Literal {
 		this.literal = literal;
 		this.isNegative = isNegative;
 	}
+	
+	public String toString() {
+		if(isNegative){
+			return "-" + literal;
+		}else{
+			return "" + literal;
+		}
+	}
 
 }
