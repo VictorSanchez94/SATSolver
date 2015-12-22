@@ -7,7 +7,9 @@ public class Literal implements Serializable{
 	public String literal;
 	public boolean isNegative;
 
-
+	/**
+	 * Constructor with a String
+	 */
 	public Literal (String var) {
 		if(var.contains("-")){
 			this.isNegative = true;
@@ -18,11 +20,15 @@ public class Literal implements Serializable{
 		}
 	}
 	
+	/**
+	 * Constructor with explicit arguments
+	 */
 	public Literal (String literal, boolean isNegative) {
 		this.literal = literal;
 		this.isNegative = isNegative;
 	}
 	
+	@Override
 	public String toString() {
 		if(isNegative){
 			return "-" + literal;

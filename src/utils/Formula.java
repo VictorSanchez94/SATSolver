@@ -13,6 +13,7 @@ public class Formula {
 	private boolean isHornSAT = true;
 	private boolean is2SAT = true;
 	private boolean isNSAT = true;
+	private boolean dontChangeNSAT = false;
 	
 	/**
 	 * Constructor
@@ -26,6 +27,11 @@ public class Formula {
 		}
 	}
 	
+	/**
+	 * Pre: ---
+	 * Post: Parse the input and add the SAT Formula to the ArrayList
+	 */
+	@SuppressWarnings("unchecked")			//ArrayList<Literal> cast conversion is 100% true
 	public void start() {
 		clauses = new ArrayList<Clause>();		//Initialize clauses vector
 		ArrayList<Literal> aux = new ArrayList<Literal>();
@@ -33,17 +39,23 @@ public class Formula {
 		while(scanner.hasNext()){
 			s = scanner.next();
 			System.out.println(s);
-			if(s.equals("*")){
+			if(s.equals("*")){				//End of a clause detection
 				Clause cAux = new Clause((ArrayList<Literal>) aux.clone());
 				clauses.add(cAux);
+				//SAT type detection
 				if(!cAux.isHornSAT()){
 					isHornSAT = false;
 				}
 				if(!cAux.is2SAT()){
 					is2SAT = false;
 				}
-				if(!cAux.isNSAT()){
-					isNSAT = false;
+				if(!dontChangeNSAT){
+					if(!cAux.isNSAT()){
+						isNSAT = false;
+					}else{
+						isNSAT = true;
+						dontChangeNSAT = true;
+					}
 				}
 				aux.clear();
 			}else{
@@ -51,8 +63,10 @@ public class Formula {
 			}
 		}
 		clauses.add(new Clause((ArrayList<Literal>) aux.clone()));
+		scanner.close();
 	}
 	
+	@Override
 	public String toString() {
 		String buf = "";
 		Iterator<Clause> it = clauses.iterator();
@@ -65,18 +79,48 @@ public class Formula {
 		return buf;
 	}
 	
+	/**
+	 * Returns an ArrayList<Clause> with the formula
+	 * @return
+	 */
 	public ArrayList<Clause> getFormula() {
 		return clauses;
 	}
 	
+	/**
+	 * Returns true if Formula is Horn SAT
+	 */
+	public boolean isHornSAT() {
+		return isHornSAT;
+	}
+	
+	/**
+	 * Returns true if Formula is 2 SAT
+	 */
+	public boolean is2SAT() {
+		return is2SAT;
+	}
+	
+	/**
+	 * Returns true if Formula is N SAT
+	 */
+	public boolean isNSAT() {
+		return isNSAT;
+	}
+	
+	
 	
 	public static void main (String[] args) {
-		Formula f = new Formula("testFiles/prueba2.cnf");
+		Formula f = new Formula("testFiles/prueba4.cnf");
 		f.start();
 		System.out.println("LENGTH: " + f.getFormula().size());
 		System.out.println(f.toString());
 		
 		Solver.Sat2Solver(f.getFormula());
+		
+		System.out.println("IS HORN SAT? => " + f.isHornSAT());
+		System.out.println("IS 2 SAT? => " + f.is2SAT());
+		System.out.println("IS N SAT? => " + f.isNSAT());
 	}
 	
 }

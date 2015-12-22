@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import org.jgrapht.DirectedGraph;
+import org.jgrapht.alg.CycleDetector;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
-
-import com.sun.javafx.geom.Edge;
 
 public class Solver {
 
@@ -100,10 +99,14 @@ public class Solver {
 					Clause auxC = new Clause(auxClause);
 					
 					
-					System.out.println(v + "  " + v2 + "  --  " + ver1 + "  " + ver2);
-					if (clauses.contains(auxC)) {
-						System.out.println("Contiene madafaka");
-						g.addEdge(auxClause.get(0).toString(), auxClause.get(1).toString());
+//					System.out.println(v + "  " + v2 + "  --  " + ver1 + "  " + ver2);
+					if (contains(clauses, auxC)) {
+						
+						if (!auxClause.get(0).toString().equals(auxClause.get(1).toString())) {
+							System.out.println("Contiene madafaka");
+							g.addEdge(v, v2);
+						}
+						
 					}
 					
 
@@ -118,15 +121,47 @@ public class Solver {
 		for (DefaultEdge e:edges) {
 			System.out.println(e);
 		}
-		    
+		
+		CycleDetector<String, DefaultEdge> cycleDetector = new CycleDetector<>(g);
+		if (cycleDetector.detectCycles()) {
+			System.out.println("No tiene solucion niggah");
+		}
+		else {
+			System.out.println("Tiene solución madafaka");
+		}
+		
 	}
 	
 	
 	private static boolean contains(ArrayList<Clause> clauses, Clause c) {
+		int found = 0;
+		ArrayList<Literal> cAux = c.getLiterals();
+
+
 		for (Clause aux:clauses) {
-			ArrayList<Variable> variables = aux.getVariables();
-			if (aux.)
+			ArrayList<Literal> lAux = aux.getLiterals();
+
+			
+			for (int i=0; i<lAux.size(); i++) {
+				for (int j=0; j<cAux.size(); j++) {
+					
+					if (lAux.get(i).isNegative == cAux.get(j).isNegative && lAux.get(i).literal.equals(cAux.get(j).literal)) {
+						found ++;
+					}
+					
+				}
+			}
+		
+			if (found == c.getLiterals().size()) {
+				return true;
+			}
+			
+			found = 0;
+			
 		}
+		
+
+		return false;
 	}
 	
 	
