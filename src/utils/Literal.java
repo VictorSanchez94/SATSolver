@@ -5,7 +5,9 @@ public class Literal {
 	public String literal;
 	public boolean isNegative;
 
-
+	/**
+	 * Constructor with a String
+	 */
 	public Literal (String var) {
 		if(var.contains("-")){
 			this.isNegative = true;
@@ -16,11 +18,15 @@ public class Literal {
 		}
 	}
 	
+	/**
+	 * Constructor with explicit arguments
+	 */
 	public Literal (String literal, boolean isNegative) {
 		this.literal = literal;
 		this.isNegative = isNegative;
 	}
 	
+	@Override
 	public String toString() {
 		if(isNegative){
 			return "-" + literal;
