@@ -4,15 +4,18 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import org.jgrapht.DirectedGraph;
-import org.jgrapht.alg.CycleDetector;
+import org.jgrapht.alg.StrongConnectivityInspector;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DirectedSubgraph;
+
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 public class Solver {
 
 	
 	
-	public static void Sat2Solver (ArrayList<Clause> clauses) {
+	public static boolean Sat2Solver (ArrayList<Clause> clauses) {
 		
 		DirectedGraph<String, DefaultEdge> g =
 	            new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
@@ -103,32 +106,86 @@ public class Solver {
 					if (contains(clauses, auxC)) {
 						
 						if (!auxClause.get(0).toString().equals(auxClause.get(1).toString())) {
-							System.out.println("Contiene madafaka");
 							g.addEdge(v, v2);
 						}
 						
 					}
-					
 
 				}
-				
 				
 			}
 		}
 		
 		
-		Set<DefaultEdge> edges = g.edgeSet();
-		for (DefaultEdge e:edges) {
-			System.out.println(e);
+		StrongConnectivityInspector<String, DefaultEdge> sci = new StrongConnectivityInspector<String, DefaultEdge>(g);
+		java.util.List<DirectedSubgraph<String, DefaultEdge>> subgraphs = sci.stronglyConnectedSubgraphs();
+		
+//		System.out.println(subgraphs.size());
+		
+		for (DirectedSubgraph<String, DefaultEdge> dg: subgraphs) {
+//			System.out.println(dg);
+			/*for (String s:literals) {
+				if (dg.containsVertex(s) && dg.containsVertex("-" + s)) {
+					return false;
+				}
+			}*/
+			
+			if (dg.edgeSet().size() == 0) {
+				return false;
+			}
 		}
 		
-		CycleDetector<String, DefaultEdge> cycleDetector = new CycleDetector<>(g);
-		if (cycleDetector.detectCycles()) {
-			System.out.println("No tiene solucion niggah");
+		
+		
+		
+		/*if (sci.isStronglyConnected()) {
+//			return true;
 		}
 		else {
-			System.out.println("Tiene solución madafaka");
+			return false;
+		}*/
+		
+		/*Set<DefaultEdge> edges = g.edgeSet();
+		for (DefaultEdge e:edges) {
+			String v1 = g.getEdgeSource(e);
+			String v2 = g.getEdgeTarget(e);
+			System.out.println(e);
+
+			if (v1.startsWith("-") && !v2.startsWith("-")) {
+				System.out.println("Comparation: " + v1.substring(1, v1.length()) + "   " + (v2));
+				if (v1.substring(1, v1.length()).equals(v2)) {
+					return false;
+				}
+			}
+			else if (!v1.startsWith("-") && v2.startsWith("-")) {
+				System.out.println("Comparation: " + v2.substring(1, v2.length()) + "   " + (v1));
+				if (v2.substring(1, v1.length()).equals(v1)) {
+					return false;
+				}
+			}
+			
+		}*/
+		
+		/*CycleDetector<String, DefaultEdge> cycleDetector = new CycleDetector<>(g);
+		if (!cycleDetector.detectCycles()) {
+			return false;
 		}
+		else {
+
+		}*/
+		
+		
+		/*Set<DefaultEdge> edges1 = g.edgeSet();
+		Set<DefaultEdge> edges2 = g.edgeSet();
+		for (DefaultEdge e1:edges1) {
+			for (DefaultEdge e2:edges1) {
+
+				
+			}
+		}*/
+		
+		
+		return true;
 		
 	}
 	

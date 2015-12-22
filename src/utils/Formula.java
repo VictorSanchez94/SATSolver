@@ -111,12 +111,19 @@ public class Formula {
 	
 	
 	public static void main (String[] args) {
-		Formula f = new Formula("testFiles/prueba4.cnf");
+		Formula f = new Formula("testFiles/prueba3.cnf");
 		f.start();
 		System.out.println("LENGTH: " + f.getFormula().size());
 		System.out.println(f.toString());
 		
-		Solver.Sat2Solver(f.getFormula());
+		boolean satisfactible = Solver.Sat2Solver(f.getFormula());
+		
+		if (satisfactible) {
+			System.out.println("Tiene solución");
+		}
+		else {
+			System.out.println("No tiene solución");
+		}
 		
 		System.out.println("IS HORN SAT? => " + f.isHornSAT());
 		System.out.println("IS 2 SAT? => " + f.is2SAT());
