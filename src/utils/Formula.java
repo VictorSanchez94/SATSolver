@@ -20,7 +20,7 @@ public class Formula {
 	public Formula (String pathFile) {
 		try {
 			scanner = new Scanner(new File(pathFile));
-			scanner.useDelimiter("([\\)\n]|\\(|\\)|\\+)+");
+			scanner.useDelimiter("([\\)\n\r]|\\(|\\)|\\+)+");
 		} catch (FileNotFoundException e) {
 			System.err.println("ERROR. El fichero indicado no existe.");
 		}
@@ -71,10 +71,12 @@ public class Formula {
 	
 	
 	public static void main (String[] args) {
-		Formula f = new Formula("testFiles/prueba1.cnf");
+		Formula f = new Formula("testFiles/prueba2.cnf");
 		f.start();
 		System.out.println("LENGTH: " + f.getFormula().size());
 		System.out.println(f.toString());
+		
+		Solver.Sat2Solver(f.getFormula());
 	}
 	
 }

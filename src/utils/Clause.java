@@ -1,5 +1,6 @@
 package utils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -8,9 +9,9 @@ import java.util.Iterator;
  * To be Stored in HashObjects two ArrayLists
  */
 
-public class Clause {
+public class Clause implements Serializable{
     private ArrayList<Literal> variables;
-    private int size,i;
+    private int size;
 
     public Clause(final ArrayList<Literal> a) {
         this.variables = a;
@@ -24,7 +25,7 @@ public class Clause {
     public void removeVar(final String var) {
         //remove and place a 0 in place of the variable in the array to hold position
         //also update clause size with the update size of the array
-        for (i=0; i<size; i++) {
+        for (int i=0; i<size; i++) {
             if (variables.get(i).equals(var)) {
             	variables.get(i).literal = "";
                 size--;
@@ -33,7 +34,7 @@ public class Clause {
     }
 
     public void addVar(final String var) {
-        for (i=0; i<size; i++) {
+        for (int i=0; i<size; i++) {
             if (variables.get(i).equals("")) {
             	variables.get(i).literal = var;
                 size++;

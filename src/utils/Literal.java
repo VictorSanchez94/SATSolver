@@ -1,6 +1,8 @@
 package utils;
 
-public class Literal {
+import java.io.Serializable;
+
+public class Literal implements Serializable{
 
 	public String literal;
 	public boolean isNegative;
