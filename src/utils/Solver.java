@@ -14,6 +14,11 @@ import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 public class Solver {
 
 	
+	/**
+	 * References:
+	 * 		http://www.cs.umd.edu/~gasarch/TOPICS/sat/2SAT.ppt
+	 * 		https://kartikkukreja.wordpress.com/2013/05/16/solving-2-sat-in-linear-time/
+	 */
 	
 	public static boolean Sat2Solver (ArrayList<Clause> clauses) {
 		
