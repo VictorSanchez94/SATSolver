@@ -20,7 +20,7 @@ public class Formula {
 	public Formula (String pathFile) {
 		try {
 			scanner = new Scanner(new File(pathFile));
-			scanner.useDelimiter("([\\)\n]|\\(|\\)|\\+)+");
+			scanner.useDelimiter("([\\)\n\r]|\\(|\\)|\\+)+");
 		} catch (FileNotFoundException e) {
 			System.err.println("ERROR. El fichero indicado no existe.");
 		}
