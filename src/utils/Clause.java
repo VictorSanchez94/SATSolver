@@ -1,32 +1,28 @@
 package utils;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 /*
  * Stores the variables contained in each Clause of the Formula
- * To be Stored in HashObjects two ArrayLists
  */
 
-public class Clause implements Serializable{
+public class Clause {
 
     private ArrayList<Literal> literals;
-    private int size;
 
     /**
      * Constructor
      */
     public Clause(final ArrayList<Literal> a) {
         this.literals = a;
-        this.size = a.size();
     }
 
     /**
      * Return size of the Clause
      */
     public int getSize() {
-        return size;
+        return literals.size();
     }
 
     /**
@@ -34,26 +30,22 @@ public class Clause implements Serializable{
      * Post: Remove and place an empty String in place of the variable in the array to hold position
      * 		also update clause size with the updated size of the array
      */
-    public void removeVar(final String var) {
-        //remove and place a 0 in place of the variable in the array to hold position
-        //also update clause size with the update size of the array
-        for (int i=0; i<size; i++) {
-            if (literals.get(i).equals(var)) {
-            	literals.get(i).literal = "";
-                size--;
-            }
-        }
+    public void removeLiteral(Literal l) {
+    	int i = 0;
+    	while(!literals.get(i).equals(l)){
+    		i++;
+    	}
+    	literals.remove(i);
     }
     
     /**
      * Pre: ---
      * Post: Place the String 'var' in the Clause also update clause size with the updated size of the array
      */
-    public void addVar(final String var) {
-        for (int i=0; i<size; i++) {
+    public void addLiteral(final String var) {
+        for (int i=0; i<literals.size(); i++) {
             if (literals.get(i).equals("")) {
             	literals.get(i).literal = var;
-                size++;
                 break;
             }
         }
@@ -91,7 +83,7 @@ public class Clause implements Serializable{
      * Return true only if Clause is 2 SAT
      */
 	public boolean is2SAT() {
-		if(size <=2 && !isHornSAT()){
+		if(literals.size() <=2 && !isHornSAT()){
 			return true;
 		}else{
 			return false;
@@ -103,7 +95,7 @@ public class Clause implements Serializable{
      */
 	public boolean isHornSAT() {
 		int numPositiveVars = 0;
-		for(int i=0; i<size; i++){
+		for(int i=0; i<literals.size(); i++){
 			if(!literals.get(i).isNegative){
 				numPositiveVars++;
 			}
@@ -119,7 +111,7 @@ public class Clause implements Serializable{
      * Return true only if Clause is N SAT
      */
 	public boolean isNSAT() {
-		if(size>2){
+		if(literals.size()>2 && !isHornSAT()){
 			return true;
 		}else{
 			return false;
@@ -139,5 +131,14 @@ public class Clause implements Serializable{
         buf += " )";
         return buf;
     }
+
+	public boolean contains(Literal literal) {
+		for(Literal l: literals){
+			if(l.equals(literal)){
+				return true;
+			}
+		}
+		return false;
+	}
 
 }

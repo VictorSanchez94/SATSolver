@@ -1,8 +1,6 @@
 package utils;
 
-import java.io.Serializable;
-
-public class Literal implements Serializable{
+public class Literal {
 
 	public String literal;
 	public boolean isNegative;
@@ -28,12 +26,36 @@ public class Literal implements Serializable{
 		this.isNegative = isNegative;
 	}
 	
+	public String getLiteral() {
+		return literal;
+	}
+
+	public void setLiteral(String literal) {
+		this.literal = literal;
+	}
+
+	public boolean isNegative() {
+		return isNegative;
+	}
+
+	public void setNegative(boolean isNegative) {
+		this.isNegative = isNegative;
+	}
+
 	@Override
 	public String toString() {
 		if(isNegative){
 			return "-" + literal;
 		}else{
 			return "" + literal;
+		}
+	}
+	
+	public boolean equals (Literal l) {
+		if(literal.equals(l.getLiteral()) && isNegative == l.isNegative()){
+			return true;
+		}else{
+			return false;
 		}
 	}
 

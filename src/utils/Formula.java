@@ -38,7 +38,7 @@ public class Formula {
 		String s;
 		while(scanner.hasNext()){
 			s = scanner.next();
-			System.out.println(s);
+//			System.out.println(s);
 			if(s.equals("*")){				//End of a clause detection
 				Clause cAux = new Clause((ArrayList<Literal>) aux.clone());
 				clauses.add(cAux);
@@ -108,26 +108,40 @@ public class Formula {
 		return isNSAT;
 	}
 	
+	/**
+	 * Remove Clause c of the Formula formula 
+	 */
+	public void removeClause (Clause c) {
+		clauses.remove(c);
+	}
 	
 	
 	public static void main (String[] args) {
-		Formula f = new Formula("testFiles/prueba3.cnf");
+		Formula f = new Formula("testFiles/prueba1.cnf");
 		f.start();
 		System.out.println("LENGTH: " + f.getFormula().size());
 		System.out.println(f.toString());
 		
 		boolean satisfactible = Solver.Sat2Solver(f.getFormula());
+		boolean satisf = Solver.hornSATSolver(f);
 		
 		if (satisfactible) {
-			System.out.println("Tiene solución");
+			System.out.println("Tiene soluciï¿½n");
 		}
 		else {
-			System.out.println("No tiene solución");
+			System.out.println("No tiene soluciï¿½n");
+		}
+		if(satisf){
+			System.out.println("Tiene solucion segun Horn-SAT");
 		}
 		
 		System.out.println("IS HORN SAT? => " + f.isHornSAT());
 		System.out.println("IS 2 SAT? => " + f.is2SAT());
 		System.out.println("IS N SAT? => " + f.isNSAT());
+	}
+
+	public void addClause(Clause c) {
+		clauses.add(c);
 	}
 	
 }
