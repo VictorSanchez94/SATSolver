@@ -187,30 +187,30 @@ public class Formula {
 		return formula;
 	}
 	
-	public static void main (String[] args) {
-		Formula f = new Formula("testFiles/prueba1.cnf", true);
-		f.start();
-//		System.out.println("LENGTH: " + f.getFormula().size());
-		System.out.println(f.toString());
-		System.out.println("VARS: " + f.getVariables());
-		System.out.println(f.toString());
-		
-//		boolean satisfactible = Solver.Sat2Solver(f.getFormula());
-//		boolean satisf = Solver.hornSATSolver(f);
+//	public static void main (String[] args) {
+//		Formula f = new Formula("testFiles/prueba1.cnf", true);
+//		f.start();
+////		System.out.println("LENGTH: " + f.getFormula().size());
+//		System.out.println(f.toString());
+//		System.out.println("VARS: " + f.getVariables());
+//		System.out.println(f.toString());
 //		
-//		if (satisfactible) {
-//			System.out.println("Tiene soluci�n");
-//		}
-//		else {
-//			System.out.println("No tiene soluci�n");
-//		}
-//		if(satisf){
-//			System.out.println("Tiene solucion segun Horn-SAT");
-//		}
-//		
-//		System.out.println("IS HORN SAT? => " + f.isHornSAT());
-//		System.out.println("IS 2 SAT? => " + f.is2SAT());
-//		System.out.println("IS N SAT? => " + f.isNSAT());
-	}
+////		boolean satisfactible = Solver.Sat2Solver(f.getFormula());
+////		boolean satisf = Solver.hornSATSolver(f);
+////		
+////		if (satisfactible) {
+////			System.out.println("Tiene soluci�n");
+////		}
+////		else {
+////			System.out.println("No tiene soluci�n");
+////		}
+////		if(satisf){
+////			System.out.println("Tiene solucion segun Horn-SAT");
+////		}
+////		
+////		System.out.println("IS HORN SAT? => " + f.isHornSAT());
+////		System.out.println("IS 2 SAT? => " + f.is2SAT());
+////		System.out.println("IS N SAT? => " + f.isNSAT());
+//	}
 	
 }
