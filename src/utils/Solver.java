@@ -149,6 +149,7 @@ public class Solver {
 			Literal l = clause.get(0);
 			Literal lNegate = new Literal(l.getLiteral(), !l.isNegative());
 			formula.removeClause(clause);
+			@SuppressWarnings("unchecked")		//cast conversion 100% granted
 			ArrayList<Clause> list = (ArrayList<Clause>) formula.getFormula().clone();
 			for(Clause c: list){
 				if(c.contains(l)){
@@ -180,4 +181,55 @@ public class Solver {
 		}
 		return null;
 	}
+	
+	/**
+	 * Pre: formula must be NSAT
+	 * Post: Return true if this formula is satisfiable
+	 */
+	public static boolean nSATSolver (Formula formula) {
+		ArrayList<Literal> vars = formula.getVariables();
+		//vars.add(new Literal("x")); vars.add(new Literal("y")); vars.add(new Literal("z"));
+		boolean satisfiable = formula.isSatisfiable(formula, vars);
+		return satisfiable;
+	}
+	
+	public static void main (String[] args) {
+//		Formula f = new Formula("testFiles/pruebaNSAT.cnf",true);
+		Formula f;
+		if(args[0].equals("-f")){
+			f = new Formula(args[1], true);
+		}else{
+			f = new Formula(args[0], false);
+		}
+		f.start();
+		System.out.println("FORMULA: " + f.toString() + "\n");
+		if(f.isHornSAT()){
+			System.out.println("Es una formula de tipo Horn-SAT");
+			System.out.println("Comprobando si es satisfactible...");
+			if(hornSATSolver(f)){
+				System.out.println("Es satisfactible.");
+			}else{
+				System.out.println("No es satisfactible.");
+			}
+		}else if(f.is2SAT()){
+			System.out.println("Es una formula de tipo 2-SAT");
+			System.out.println("Comprobando si es satisfactible...");
+			if(Sat2Solver(f.getFormula())){
+				System.out.println("Es satisfactible.");
+			}else{
+				System.out.println("No es satisfactible.");
+			}
+		}else if(f.isNSAT()){
+			System.out.println("Es una formula de tipo N-SAT");
+			System.out.println("Comprobando si es satisfactible...");
+			if(nSATSolver(f)){
+				System.out.println("Es satisfactible.");
+			}else{
+				System.out.println("No es satisfactible.");
+			}
+		}else{
+			System.out.println("ERROR. No se trata de una funcion cnf.");
+		}
+	}
+	
 }

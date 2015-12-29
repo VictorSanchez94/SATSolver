@@ -43,12 +43,7 @@ public class Clause {
      * Post: Place the String 'var' in the Clause also update clause size with the updated size of the array
      */
     public void addLiteral(final String var) {
-        for (int i=0; i<literals.size(); i++) {
-            if (literals.get(i).equals("")) {
-            	literals.get(i).literal = var;
-                break;
-            }
-        }
+        	literals.add(new Literal(var));
     }
 
     /**
@@ -80,17 +75,6 @@ public class Clause {
     }*/
 
     /**
-     * Return true only if Clause is 2 SAT
-     */
-	public boolean is2SAT() {
-		if(literals.size() <=2 && !isHornSAT()){
-			return true;
-		}else{
-			return false;
-		}
-	}
-
-	/**
      * Return true only if Clause is Horn SAT
      */
 	public boolean isHornSAT() {
@@ -104,6 +88,17 @@ public class Clause {
 			return false;
 		}else{
 			return true;
+		}
+	}
+    
+    /**
+     * Return true only if Clause is 2 SAT
+     */
+	public boolean is2SAT() {
+		if(literals.size() <= 2){
+			return true;
+		}else{
+			return false;
 		}
 	}
 	
@@ -132,13 +127,27 @@ public class Clause {
         return buf;
     }
 
-	public boolean contains(Literal literal) {
+    /**
+     * Return true if the list 'literals' contains the Literal 'literal'
+     */
+	public boolean contains (Literal literal) {
 		for(Literal l: literals){
 			if(l.equals(literal)){
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	public boolean isSatisfiable (ArrayList<Literal> l) {
+		boolean satisfiable = false;
+		Iterator<Literal> it = l.iterator();
+		while (satisfiable == false || it.hasNext()) {
+			if(literals.contains(it.next())){
+				satisfiable = true;
+			}
+		}
+		return satisfiable;
 	}
 
 }

@@ -1,6 +1,6 @@
 package utils;
 
-public class Literal {
+public class Literal implements Cloneable{
 
 	public String literal;
 	public boolean isNegative;
