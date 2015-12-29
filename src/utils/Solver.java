@@ -1,6 +1,7 @@
 package utils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.jgrapht.DirectedGraph;
@@ -8,6 +9,8 @@ import org.jgrapht.alg.StrongConnectivityInspector;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedSubgraph;
+
+import sun.security.provider.certpath.Vertex;
 
 public class Solver {
 	
@@ -56,7 +59,6 @@ public class Solver {
 					auxClause.add(ver2);
 					Clause auxC = new Clause(auxClause);
 					
-//					System.out.println(v + "  " + v2 + "  --  " + ver1 + "  " + ver2);
 					if (contains(clauses, auxC)) {
 						
 						if (!auxClause.get(0).toString().equals(auxClause.get(1).toString())) {
@@ -70,23 +72,68 @@ public class Solver {
 			}
 		}
 		
+		
+		// Gets the strongly connected components
 		StrongConnectivityInspector<String, DefaultEdge> sci = new StrongConnectivityInspector<String, DefaultEdge>(g);
-		java.util.List<DirectedSubgraph<String, DefaultEdge>> subgraphs = sci.stronglyConnectedSubgraphs();
+		List<DirectedSubgraph<String, DefaultEdge>> subgraphs = sci.stronglyConnectedSubgraphs();
 		
-//		System.out.println(subgraphs.size());
+//		System.out.println(subgraphs);
 		
-		for (DirectedSubgraph<String, DefaultEdge> dg: subgraphs) {
-//			System.out.println(dg);
+		if (subgraphs.size() %2 == 0) {
+			int numSetsNegated = 0;
 			
-			if (dg.edgeSet().size() == 0) {
+			// Checks if for each subgraph there is his opposite subgraph
+			for (int i=0; i<subgraphs.size(); i++) {
+				for (int j=i+1; j<subgraphs.size(); j++) {
+					if (i != j && checkNegative(subgraphs.get(i).vertexSet(), subgraphs.get(j).vertexSet())) {
+							numSetsNegated ++;
+					}
+				}
+			}
+			
+			if (numSetsNegated == subgraphs.size()/2) {
+				return true;
+			}
+			else {
 				return false;
 			}
 		}
-		
-		return true;
+		else {
+			return false;
+		}
 		
 	}
 	
+	
+	/**
+	 * Return true if set == -set2
+	 */
+	private static boolean checkNegative(Set<String> set, Set<String> set2) {
+		
+		if (set.size() == set2.size()) {
+			
+			int vertexChecked = 0;
+			for (String v:set) {
+				if (v.startsWith("-") && set2.contains(v.substring(1, v.length()))) {
+					vertexChecked ++;
+				}
+				else if (set2.contains("-"+v)){
+					vertexChecked ++;
+				}
+			}
+			
+			if (vertexChecked == set.size()) {
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		else {
+			return false;
+		}
+		
+	}
 	
 	private static boolean contains(ArrayList<Clause> clauses, Clause c) {
 		int found = 0;
@@ -195,41 +242,50 @@ public class Solver {
 	
 	public static void main (String[] args) {
 //		Formula f = new Formula("testFiles/pruebaNSAT.cnf",true);
+		if (args.length == 0) {
+			System.err.println("Ejecute el programa, pasando una CNF como argumento");
+			return;
+		}
+		
 		Formula f;
 		if(args[0].equals("-f")){
 			f = new Formula(args[1], true);
 		}else{
 			f = new Formula(args[0], false);
 		}
+//		f = new Formula("testFiles/prueba2.cnf", true);
 		f.start();
 		System.out.println("FORMULA: " + f.toString() + "\n");
-		if(f.isHornSAT()){
-			System.out.println("Es una formula de tipo Horn-SAT");
-			System.out.println("Comprobando si es satisfactible...");
-			if(hornSATSolver(f)){
-				System.out.println("Es satisfactible.");
-			}else{
-				System.out.println("No es satisfactible.");
-			}
-		}else if(f.is2SAT()){
-			System.out.println("Es una formula de tipo 2-SAT");
-			System.out.println("Comprobando si es satisfactible...");
+
+		if(f.is2SAT()){
+			System.out.println("Es una formula de tipo 2-SAT. Comprobando sastifactibilidad...");
 			if(Sat2Solver(f.getFormula())){
 				System.out.println("Es satisfactible.");
 			}else{
 				System.out.println("No es satisfactible.");
 			}
-		}else if(f.isNSAT()){
-			System.out.println("Es una formula de tipo N-SAT");
-			System.out.println("Comprobando si es satisfactible...");
+		}
+		
+		if(f.isHornSAT()){
+			System.out.println("Es una formula de tipo Horn-SAT. Comprobando sastifactibilidad...");
+			if(hornSATSolver(f)){
+				System.out.println("Es satisfactible.");
+			}else{
+				System.out.println("No es satisfactible.");
+			}
+		} 
+		
+		if(f.isNSAT()){
+			System.out.println("Es una formula de tipo N-SAT. Comprobando sastifactibilidad...");
 			if(nSATSolver(f)){
 				System.out.println("Es satisfactible.");
 			}else{
 				System.out.println("No es satisfactible.");
 			}
-		}else{
-			System.out.println("ERROR. No se trata de una funcion cnf.");
 		}
+	/*else{
+			System.out.println("ERROR. No se trata de una funcion cnf.");
+		}*/
 	}
 	
 }
