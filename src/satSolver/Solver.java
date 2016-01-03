@@ -1,7 +1,8 @@
-package utils;
+package satSolver;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 
 import org.jgrapht.DirectedGraph;
@@ -10,14 +11,69 @@ import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedSubgraph;
 
-import sun.security.provider.certpath.Vertex;
-
+/**
+ * @authors Alberto Sabater Bailon, 546297
+ * 			Victor Sanchez Ballabriga, 602665
+ */
 public class Solver {
 
+	
+	public static void main(String[] args) {
+
+		Formula f;
+		if (args.length != 0) {
+			if (args[0].equals("-f")) {
+				f = new Formula(args[1], true);
+			} else {
+				f = new Formula(args[0], false);
+			}
+		}
+		else {
+			System.out.println("Escriba la fórmula CNF y pulse [Enter]");
+			Scanner s = new Scanner(System.in);
+			f = new Formula(s.nextLine(), false);
+		}
+
+
+		f.start();
+		System.out.println("FORMULA: " + f.toString() + "\n");
+
+		long t1 = System.currentTimeMillis();
+		
+		if (f.isHornSAT()) {
+			System.out.println("Resolviendo con el algoritmo Horn-SAT");
+			if (hornSATSolver(f)) {
+				System.out.println("Es satisfactible.");
+			} else {
+				System.out.println("No es satisfactible.");
+			}
+		} else if (f.is2SAT()) {
+			System.out.println("Resolviendo con el algoritmo 2-SAT");
+			if (Sat2Solver(f.getFormula())) {
+				System.out.println("Es satisfactible.");
+			} else {
+				System.out.println("No es satisfactible.");
+			}
+		} else if (f.isNSAT()) {
+			System.out.println("Resolviendo con el algoritmo SAT general");
+			if (nSATSolver(f)) {
+				System.out.println("Es satisfactible.");
+			} else {
+				System.out.println("No es satisfactible.");
+			}
+		} else {
+			System.out.println("ERROR. No se trata de una funcion cnf.");
+		}
+		
+		long t2 = System.currentTimeMillis();
+		System.out.println("Tiempo empleado en la resolución: " + (t2-t1) + " ms");
+	}
+	
+	
+	/* 2-SAT SOLVER METHODS */
+	
 	/**
-	 * References: http://www.cs.umd.edu/~gasarch/TOPICS/sat/2SAT.ppt
-	 * https://kartikkukreja.wordpress.com/2013/05/16/solving-2-sat-in-linear-
-	 * time/
+	 * Return true if the 2-SAT clauses are satisfactible
 	 */
 	public static boolean Sat2Solver(ArrayList<Clause> clauses) {
 
@@ -127,6 +183,10 @@ public class Solver {
 
 	}
 
+	
+	/**
+	 * Returns true if clauses contains c
+	 */
 	private static boolean contains(ArrayList<Clause> clauses, Clause c) {
 		int found = 0;
 		ArrayList<Literal> cAux = c.getLiterals();
@@ -136,12 +196,10 @@ public class Solver {
 
 			for (int i = 0; i < lAux.size(); i++) {
 				for (int j = 0; j < cAux.size(); j++) {
-
 					if (lAux.get(i).isNegative == cAux.get(j).isNegative
 							&& lAux.get(i).literal.equals(cAux.get(j).literal)) {
 						found++;
 					}
-
 				}
 			}
 
@@ -150,7 +208,6 @@ public class Solver {
 			}
 
 			found = 0;
-
 		}
 
 		return false;
@@ -229,52 +286,6 @@ public class Solver {
 		// Literal("z"));
 		boolean satisfiable = formula.isSatisfiable(formula, vars);
 		return satisfiable;
-	}
-
-	public static void main(String[] args) {
-		// Formula f = new Formula("testFiles/pruebaNSAT.cnf",true);
-		if (args.length == 0) {
-			System.err.println("Ejecute el programa, pasando una CNF como argumento");
-			return;
-		}
-
-		Formula f;
-		if (args[0].equals("-f")) {
-			f = new Formula(args[1], true);
-		} else {
-			f = new Formula(args[0], false);
-		}
-
-		f.start();
-		System.out.println("FORMULA: " + f.toString() + "\n");
-
-		if (f.isHornSAT()) {
-			System.out.println("Es una formula de tipo Horn-SAT");
-			System.out.println("Comprobando si es satisfactible...");
-			if (hornSATSolver(f)) {
-				System.out.println("Es satisfactible.");
-			} else {
-				System.out.println("No es satisfactible.");
-			}
-		} else if (f.is2SAT()) {
-			System.out.println("Es una formula de tipo 2-SAT");
-			System.out.println("Comprobando si es satisfactible...");
-			if (Sat2Solver(f.getFormula())) {
-				System.out.println("Es satisfactible.");
-			} else {
-				System.out.println("No es satisfactible.");
-			}
-		} else if (f.isNSAT()) {
-			System.out.println("Es una formula de tipo N-SAT");
-			System.out.println("Comprobando si es satisfactible...");
-			if (nSATSolver(f)) {
-				System.out.println("Es satisfactible.");
-			} else {
-				System.out.println("No es satisfactible.");
-			}
-		} else {
-			System.out.println("ERROR. No se trata de una funcion cnf.");
-		}
 	}
 
 }

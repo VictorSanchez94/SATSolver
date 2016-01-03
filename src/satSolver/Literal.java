@@ -1,5 +1,9 @@
-package utils;
+package satSolver;
 
+/**
+ * @authors Alberto Sabater Bailon, 546297
+ * 			Victor Sanchez Ballabriga, 602665
+ */
 public class Literal implements Cloneable{
 
 	public String literal;

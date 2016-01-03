@@ -1,4 +1,4 @@
-package utils;
+package satSolver;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
 
+/**
+ * @authors Alberto Sabater Bailon, 546297
+ * 			Victor Sanchez Ballabriga, 602665
+ */
 public class Formula {
 	
 	private ArrayList<Clause> clauses;
