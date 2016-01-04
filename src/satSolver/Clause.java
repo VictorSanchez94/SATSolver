@@ -1,12 +1,16 @@
-package utils;
+package satSolver;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * @authors Alberto Sabater Bailon, 546297
+ * 			Victor Sanchez Ballabriga, 602665
+ */
+
 /*
  * Stores the variables contained in each Clause of the Formula
  */
-
 public class Clause {
 
     private ArrayList<Literal> literals;
