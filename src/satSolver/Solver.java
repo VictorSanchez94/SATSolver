@@ -29,7 +29,7 @@ public class Solver {
 			}
 		}
 		else {
-			System.out.println("Escriba la fórmula CNF y pulse [Enter]");
+			System.out.println("Escriba la fï¿½rmula CNF y pulse [Enter]");
 			Scanner s = new Scanner(System.in);
 			f = new Formula(s.nextLine(), false);
 		}
@@ -66,7 +66,7 @@ public class Solver {
 		}
 		
 		long t2 = System.currentTimeMillis();
-		System.out.println("Tiempo empleado en la resolución: " + (t2-t1) + " ms");
+		System.out.println("Tiempo empleado en la resoluciï¿½n: " + (t2-t1) + " ms");
 	}
 	
 	
@@ -233,7 +233,8 @@ public class Solver {
 	/* HORN-SAT SOLVER METHODS */
 
 	/**
-	 * Pre: formula must be Horn-SAT Post: Return true if this formula is
+	 * Pre: formula must be Horn-SAT 
+	 * Post: Return true if this formula is
 	 * satisfiable
 	 */
 	public static boolean hornSATSolver(Formula formula) {
@@ -264,7 +265,8 @@ public class Solver {
 	}
 
 	/**
-	 * Pre: --- Post: Return the first Clause with only 1 element of the
+	 * Pre: --- 
+	 * Post: Return the first Clause with only 1 element of the
 	 * Formula. If Formula does not have unitaries Clauses, return null.
 	 */
 	private static Clause findUnitaryClause(Formula formula) {
@@ -277,13 +279,12 @@ public class Solver {
 	}
 
 	/**
-	 * Pre: formula must be NSAT Post: Return true if this formula is
+	 * Pre: formula must be NSAT 
+	 * Post: Return true if this formula is
 	 * satisfiable
 	 */
 	public static boolean nSATSolver(Formula formula) {
 		ArrayList<Literal> vars = formula.getVariables();
-		// vars.add(new Literal("x")); vars.add(new Literal("y")); vars.add(new
-		// Literal("z"));
 		boolean satisfiable = formula.isSatisfiable(formula, vars);
 		return satisfiable;
 	}

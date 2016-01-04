@@ -53,7 +53,7 @@ public class Formula {
 		ArrayList<Literal> aux = new ArrayList<Literal>();
 		String s;
 		while(scanner.hasNext()){
-			s = scanner.next();
+			s = scanner.next().trim();
 //			System.out.println(s);
 			if(s.equals("*")){				//End of a clause detection
 				Clause cAux = new Clause((ArrayList<Literal>) aux.clone());
@@ -170,9 +170,9 @@ public class Formula {
 				return false;
 			}
 		}else{
-				ArrayList<Literal> unusedVars2 = (ArrayList<Literal>)unusedVars.clone();
-				Formula formula2 = new Formula(formula);
-			return isSatisfiable(checkVar(formula,currentVar, true), unusedVars.remove(0), unusedVars) || isSatisfiable(checkVar(formula2,currentVar, false), unusedVars2.remove(0), unusedVars2);
+			ArrayList<Literal> unusedVars2 = (ArrayList<Literal>)unusedVars.clone();
+			Formula formula2 = new Formula(formula);
+			return isSatisfiable(checkVar(formula,currentVar,true), unusedVars.remove(0), unusedVars) || isSatisfiable(checkVar(formula2,currentVar,false), unusedVars2.remove(0), unusedVars2);
 		}
 	}
 	
