@@ -52,11 +52,12 @@ public class Formula {
 		clauses = new ArrayList<Clause>();		//Initialize clauses vector
 		ArrayList<Literal> aux = new ArrayList<Literal>();
 		String s;
+		Clause cAux = null;
 		while(scanner.hasNext()){
 			s = scanner.next().trim();
 //			System.out.println(s);
 			if(s.equals("*")){				//End of a clause detection
-				Clause cAux = new Clause((ArrayList<Literal>) aux.clone());
+				cAux = new Clause((ArrayList<Literal>) aux.clone());
 				clauses.add(cAux);
 				//SAT type detection
 				if(!cAux.isHornSAT()){
@@ -78,7 +79,22 @@ public class Formula {
 				aux.add(new Literal(s));
 			}
 		}
-		clauses.add(new Clause((ArrayList<Literal>) aux.clone()));
+		Clause c = new Clause((ArrayList<Literal>) aux.clone());
+		clauses.add(c);
+		if(!c.isHornSAT()){
+			isHornSAT = false;
+		}
+		if(!c.is2SAT()){
+			is2SAT = false;
+		}
+		if(!dontChangeNSAT){
+			if(!c.isNSAT()){
+				isNSAT = false;
+			}else{
+				isNSAT = true;
+				dontChangeNSAT = true;
+			}
+		}
 		scanner.close();
 	}
 	
