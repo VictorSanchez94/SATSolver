@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -18,6 +19,8 @@ public class Formula {
 	private boolean is2SAT = true;
 	private boolean isNSAT = true;
 	private boolean dontChangeNSAT = false;
+	private final String[] VARS = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", 
+			"k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
 	
 	/**
 	 * Constructor
@@ -41,6 +44,73 @@ public class Formula {
 		this.isHornSAT = f.isHornSAT();
 		this.is2SAT = f.is2SAT();
 		this.isNSAT = f.isNSAT();
+	}
+	
+	
+	public Formula (int numClauses, int maxClauseLength, int numVariables, int type) {
+		
+		if (numVariables > VARS.length) { numVariables = VARS.length; }
+		clauses = new ArrayList<Clause>();
+		Random r = new Random();
+		
+		switch(type) {
+		case 1:		// 2-SAT
+			isHornSAT = false;
+			
+			for (int i=0; i<numClauses; i++) {
+				ArrayList<Literal> literal= new ArrayList<Literal>();
+				
+				for (int j=0; j<2; j++) {
+					if (r.nextDouble() > 0.5) {	// Positive literal
+						literal.add(new Literal(VARS[r.nextInt(numVariables)]));
+					}
+					else{
+						literal.add(new Literal("-" + VARS[r.nextInt(numVariables)]));
+					}
+				}
+				clauses.add(new Clause(literal));
+			}
+			
+			break;	// Horn-SAT
+		case 2:
+			is2SAT = false;
+			for (int i=0; i<numClauses; i++) {
+				ArrayList<Literal> literal= new ArrayList<Literal>();
+				int numLiterals = r.nextInt(maxClauseLength) +1;
+				
+				if (r.nextDouble() > 0.5) {
+					literal.add(new Literal(VARS[r.nextInt(numVariables)]));
+				}
+				
+				for (int j=literal.size(); j<numLiterals; j++) {
+					literal.add(new Literal("-" + VARS[r.nextInt(numVariables)]));
+				}
+				clauses.add(new Clause(literal));
+			}
+			
+			break;
+		case 3:		// N-SAT
+			is2SAT = false;
+			isHornSAT = false;
+			
+			for (int i=0; i<numClauses; i++) {
+				ArrayList<Literal> literal= new ArrayList<Literal>();
+				int numLiterals = r.nextInt(maxClauseLength) +1;
+				
+				for (int j=0; j<numLiterals; j++) {
+					if (r.nextDouble() > 0.5) {	// Positive literal
+						literal.add(new Literal(VARS[r.nextInt(numVariables)]));
+					}
+					else{
+						literal.add(new Literal("-" + VARS[r.nextInt(numVariables)]));
+					}
+				}
+				clauses.add(new Clause(literal));
+			}
+			
+			break;
+		}
+		
 	}
 	
 	/**

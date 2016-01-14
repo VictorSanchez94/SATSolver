@@ -22,20 +22,24 @@ public class Solver {
 
 		Formula f;
 		if (args.length != 0) {
-			if (args[0].equals("-f")) {
+			if (args[0].equals("rnd")) {
+				f = new Formula(Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]));
+			}
+			else if (args[0].equals("-f")) {
 				f = new Formula(args[1], true);
+				f.start();
 			} else {
 				f = new Formula(args[0], false);
+				f.start();
 			}
 		}
 		else {
 			System.out.println("Escriba la fórmula CNF y pulse [Enter]");
 			Scanner s = new Scanner(System.in);
 			f = new Formula(s.nextLine(), false);
+			f.start();
 		}
 
-
-		f.start();
 		System.out.println("FORMULA: " + f.toString() + "\n");
 
 		long t1 = System.currentTimeMillis();
